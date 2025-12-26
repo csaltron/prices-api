@@ -1,3 +1,14 @@
 spring:
   application:
     name: prices-api
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-stacktrace: never
+
+logging:
+  level:
+    com.company.prices: DEBUG
+    org.springframework.web: INFO
