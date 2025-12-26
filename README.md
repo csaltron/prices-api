@@ -196,10 +196,6 @@ Inicialización de esquema y datos mediante scripts SQL estándar, facilitando m
 prices-api/
 ├── pom.xml
 ├── README.md
-├── test-files/                     # Archivos de test para copiar manualmente
-│   ├── PriceServiceTest.java
-│   ├── PriceControllerIntegrationTest.java
-│   └── PriceApiSystemTest.java
 └── src/
     ├── main/
     │   ├── java/
