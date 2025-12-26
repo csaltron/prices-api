@@ -24,3 +24,17 @@ spring:
       mode: always
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
+logging:
+  level:
+    com.company.prices: DEBUG
+    org.springframework.web: INFO
+
+spring-doc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha

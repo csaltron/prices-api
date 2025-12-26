@@ -10,5 +10,11 @@ server:
 
 logging:
   level:
-    com.company.prices: DEBUG
+    com.company.prices: INFO
     org.springframework.web: INFO
+
+spring-doc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
