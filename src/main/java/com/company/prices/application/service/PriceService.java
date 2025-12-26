@@ -6,6 +6,6 @@ import com.company.prices.domain.model.Price;
 public class PriceService {
 
     public Price findApplicablePrice(LocalDateTime applicationDate, Long productId, Long brandId) {
-        return null;
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }
