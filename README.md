@@ -1,6 +1,43 @@
-# Prices API - Arquitectura Hexagonal
+# Prices API
 
-API REST para consulta de precios aplicables en un sistema de comercio electrónico.
+## Descripción General
+
+API REST empresarial diseñada para gestionar la consulta de precios en un sistema de comercio electrónico. El sistema permite determinar el precio final aplicable a un producto específico considerando múltiples tarifas vigentes en diferentes rangos de fechas.
+
+### Propósito
+
+En un entorno de comercio electrónico, los precios de los productos pueden variar según diferentes factores: promociones especiales, horarios específicos, campañas de marketing o estrategias comerciales. Esta API resuelve el problema de determinar qué precio debe aplicarse a un producto en un momento dado, considerando que pueden existir múltiples tarifas superpuestas en el tiempo.
+
+### Caso de Uso Principal
+
+Cuando un cliente consulta el precio de un producto en la tienda online, el sistema debe:
+
+1. Recibir la fecha/hora de la consulta
+2. Identificar el producto consultado
+3. Determinar la marca/cadena del grupo empresarial
+4. Buscar todas las tarifas aplicables en ese momento
+5. Aplicar la tarifa de mayor prioridad si existen múltiples opciones
+6. Devolver el precio final con sus fechas de validez
+
+### Ejemplo Práctico
+
+Un producto con ID 35455 de la marca XYZS (ID: 1) puede tener:
+
+- Una tarifa base (35.50 EUR) válida todo el año
+- Una promoción especial (25.45 EUR) válida de 15:00 a 18:30 del 14 de junio
+- Una oferta matutina (30.50 EUR) válida de 00:00 a 11:00 del 15 de junio
+- Una tarifa premium (38.95 EUR) válida desde las 16:00 del 15 de junio hasta fin de año
+
+Si un cliente consulta el precio a las 16:00 del 14 de junio, el sistema aplicará automáticamente la promoción especial de 25.45 EUR por tener mayor prioridad.
+
+### Características Principales
+
+- Consulta de precios por fecha, producto y marca
+- Resolución automática de conflictos mediante sistema de prioridades
+- Validación de parámetros de entrada
+- Manejo robusto de errores con mensajes descriptivos
+- Documentación interactiva con OpenAPI/Swagger (Solo para entorno de desarrollo)
+- Arquitectura escalable y mantenible
 
 ## Tecnologías
 
