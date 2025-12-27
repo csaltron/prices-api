@@ -1,6 +1,6 @@
 package com.company.prices.integration;
 
-import com.company.prices.infrastructure.config.PricesApiApplication;
+import com.company.prices.PricesApiApplication;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
