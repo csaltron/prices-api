@@ -47,7 +47,8 @@ Si un cliente consulta el precio a las 16:00 del 14 de junio, el sistema aplicar
 - H2 Database (in-memory)
 - Maven
 - JUnit 5
-- MockMvc & REST Assured
+- MockMvc
+- Docker
 
 ## Arquitectura
 
@@ -77,6 +78,37 @@ prices-api/
 - API First
 - Inmutabilidad en objetos de dominio
 - Separación de responsabilidades por capas
+
+## Estructura del Proyecto
+
+```
+prices-api/
+├── pom.xml
+├── README.md
+├── Dockerfile
+├── .dockerignore
+├── docker-compose.yml
+├── .env
+└── src/
+    ├── main/
+    │   ├── java/
+    │   │   └── com/company/prices/
+    │   │       ├── domain/
+    │   │       ├── application/
+    │   │       └── infrastructure/
+    │   └── resources/
+    │       ├── application.yml
+    │       ├── application-local.yml
+    │       ├── application-test.yml
+    │       ├── schema.sql
+    │       └── data.sql
+    └── test/
+        └── java/
+            └── com/company/prices/
+                ├── unit/
+                ├── integration/
+                └── system/
+```
 
 ## Endpoints
 
@@ -121,6 +153,7 @@ Consulta el precio aplicable según fecha, producto y marca.
 
 - JDK 17
 - Maven 3.6+
+- Docker (opcional)
 
 ### Compilar
 
@@ -128,10 +161,61 @@ Consulta el precio aplicable según fecha, producto y marca.
 ./mvnw clean install
 ```
 
-### Ejecutar
+### Ejecutar Localmente
 
 ```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local 
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+### Ejecutar con Docker
+
+#### Usando Docker Compose (recomendado)
+
+Construir y ejecutar:
+```bash
+docker-compose up -d
+```
+
+Ver logs:
+```bash
+docker-compose logs -f
+```
+
+Detener:
+```bash
+docker-compose down
+```
+
+#### Usando Docker directamente
+
+Construir imagen:
+```bash
+docker build -t prices-api:1.0.0 .
+```
+
+Ejecutar contenedor con perfil local:
+```bash
+docker run -d --name prices-api -p 8080:8080 -e SPRING_PROFILES_ACTIVE=local prices-api:1.0.0
+```
+
+Ver logs:
+```bash
+docker logs -f prices-api
+```
+
+Detener contenedor:
+```bash
+docker stop prices-api
+```
+
+Eliminar contenedor:
+```bash
+docker rm prices-api
+```
+
+Detener y eliminar en un solo paso:
+```bash
+docker stop prices-api && docker rm prices-api
 ```
 
 La aplicación estará disponible en `http://localhost:8080`
@@ -152,7 +236,6 @@ Acceder a `http://localhost:8080/h2-console`
 - Password: (vacío)
 
 ## Testing
-
 
 ### Ejecutar todos los tests
 
@@ -219,37 +302,34 @@ Inicialización de esquema y datos mediante scripts SQL estándar, facilitando m
 
 ## Consideraciones de Despliegue
 
+### Containerización
+
+La aplicación incluye configuración Docker lista para producción:
+
+- Multi-stage build para optimizar tamaño de imagen
+- Imagen base Amazon Corretto Alpine (ligera y segura)
+- Health checks configurados
+- Variables de entorno para configuración
+
+### Recomendaciones para Producción
+
 1. Cambiar H2 por base de datos persistente (PostgreSQL, MySQL)
 2. Externalizar configuración mediante variables de entorno
 3. Añadir seguridad con Spring Security (JWT/OAuth2)
 4. Implementar logs estructurados con formato JSON
 5. Añadir métricas con Actuator y Micrometer
-6. Dockerizar la aplicación
+6. Configurar límites de recursos en Kubernetes/Docker
 7. Implementar CI/CD con GitHub Actions
+8. Configurar backups automáticos de base de datos
+9. Implementar rate limiting para protección contra abusos
+10. Configurar SSL/TLS para conexiones seguras
 
-## Estructura del Proyecto
+### Variables de Entorno Docker
 
-```
-prices-api/
-├── pom.xml
-├── README.md
-└── src/
-    ├── main/
-    │   ├── java/
-    │   │   └── com/company/prices/
-    │   │       ├── domain/
-    │   │       ├── application/
-    │   │       └── infrastructure/
-    │   └── resources/
-    │       ├── application.yml
-    │       ├── application-local.yml
-    │       ├── application-test.yml
-    │       ├── schema.sql
-    │       └── data.sql
-    └── test/
-        └── java/
-            └── com/company/prices/
-                ├── unit/
-                ├── integration/
-                └── system/
-```
+| Variable | Descripción | Valor por Defecto |
+|----------|-------------|-------------------|
+| JAVA_OPTS | Opciones JVM | -Xmx512m -Xms256m |
+| SPRING_PROFILES_ACTIVE | Perfil Spring activo | local |
+
+
+
