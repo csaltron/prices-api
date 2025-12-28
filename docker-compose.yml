@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  prices-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prices-api
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILE:-local}
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - prices-network
+
+networks:
+  prices-network:
+    driver: bridge

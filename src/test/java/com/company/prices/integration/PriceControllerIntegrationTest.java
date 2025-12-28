@@ -1,6 +1,6 @@
 package com.company.prices.integration;
 
-import com.company.prices.infrastructure.config.PricesApiApplication;
+import com.company.prices.PricesApiApplication;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -126,13 +127,6 @@ class PriceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should return 400 when required parameters are missing")
-    void shouldReturn400WhenParametersMissing() throws Exception {
-        mockMvc.perform(get("/api/v1/prices"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     @DisplayName("Should return 404 when price not found")
     void shouldReturn404WhenPriceNotFound() throws Exception {
         mockMvc.perform(get("/api/v1/prices")
@@ -160,5 +154,81 @@ class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.price").exists())
                 .andExpect(jsonPath("$.startDate").exists())
                 .andExpect(jsonPath("$.endDate").exists());
+    }
+
+    @Test
+    @DisplayName("Should return 400 when missing required parameter applicationDate")
+    void shouldReturn400WhenMissingApplicationDate() throws Exception {
+        mockMvc.perform(get("/api/v1/prices")
+                        .param("productId", "35455")
+                        .param("brandId", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value(containsString("applicationDate")));
+    }
+
+    @Test
+    @DisplayName("Should return 400 when missing required parameter productId")
+    void shouldReturn400WhenMissingProductId() throws Exception {
+        mockMvc.perform(get("/api/v1/prices")
+                        .param("applicationDate", "2020-06-14T10:00:00")
+                        .param("brandId", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value(containsString("productId")));
+    }
+
+    @Test
+    @DisplayName("Should return 400 when missing required parameter brandId")
+    void shouldReturn400WhenMissingBrandId() throws Exception {
+        mockMvc.perform(get("/api/v1/prices")
+                        .param("applicationDate", "2020-06-14T10:00:00")
+                        .param("productId", "35455")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value(containsString("brandId")));
+    }
+
+    @Test
+    @DisplayName("Should return 400 when applicationDate has invalid format")
+    void shouldReturn400WhenInvalidDateFormat() throws Exception {
+        mockMvc.perform(get("/api/v1/prices")
+                        .param("applicationDate", "invalid-date")
+                        .param("productId", "35455")
+                        .param("brandId", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(400));
+    }
+
+    @Test
+    @DisplayName("Should validate complete response structure and data types")
+    void shouldValidateCompleteResponseStructure() throws Exception {
+        mockMvc.perform(get("/api/v1/prices")
+                        .param("applicationDate", "2020-06-14T10:00:00")
+                        .param("productId", "35455")
+                        .param("brandId", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.productId").exists())
+                .andExpect(jsonPath("$.brandId").exists())
+                .andExpect(jsonPath("$.priceList").exists())
+                .andExpect(jsonPath("$.startDate").exists())
+                .andExpect(jsonPath("$.endDate").exists())
+                .andExpect(jsonPath("$.price").exists())
+                .andExpect(jsonPath("$.productId").isNumber())
+                .andExpect(jsonPath("$.brandId").isNumber())
+                .andExpect(jsonPath("$.priceList").isNumber())
+                .andExpect(jsonPath("$.price").isNumber())
+                .andExpect(jsonPath("$.startDate").isString())
+                .andExpect(jsonPath("$.endDate").isString());
     }
 }
