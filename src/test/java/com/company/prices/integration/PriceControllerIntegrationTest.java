@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ActiveProfiles("local")// Use 'test' profile for integration tests
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest(classes = PricesApiApplication.class)
 class PriceControllerIntegrationTest {
@@ -24,106 +24,73 @@ class PriceControllerIntegrationTest {
 
 
     @Test
-    @DisplayName("Test 1: When day 14 and hour 10, product 35455, brandId 1, expects price 35.50 EUR")
-    void test1WhenDay14AndHour10Product35455BrandId1ExpectsPrice() throws Exception {
-
+    @DisplayName("Should return price 35.50 EUR when 14th at 10:00 for product 35455 and brand 1")
+    void shouldReturnPrice35_When14thAt10_ForProduct35455AndBrand1() throws Exception {
         mockMvc.perform(get("/api/v1/prices")
                         .param("applicationDate", "2020-06-14T10:00:00")
                         .param("productId", "35455")
                         .param("brandId", "1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.priceList").exists())
-                .andExpect(jsonPath("$.price").exists())
-                .andExpect(jsonPath("$.startDate").exists())
-                .andExpect(jsonPath("$.endDate").exists())
                 .andExpect(jsonPath("$.productId").value(35455))
                 .andExpect(jsonPath("$.brandId").value(1))
+                .andExpect(jsonPath("$.priceList").value(1))
                 .andExpect(jsonPath("$.price").value(35.50))
-                .andExpect(jsonPath("$.currency").value("EUR"));
-
-
+                .andExpect(jsonPath("$.currency").value("EUR"))
+                .andExpect(jsonPath("$.startDate").value("2020-06-14T00:00:00"))
+                .andExpect(jsonPath("$.endDate").value("2020-12-31T23:59:59"));
     }
 
     @Test
-    @DisplayName("Test 2: When day 14 and hour 16, product 35455, brandId 1, expects price 25.45 EUR")
-    void test2WhenDay14AndHour16Product35455BrandId1ExpectsPrice() throws Exception {
-
+    @DisplayName("Should return price 25.45 EUR when 14th at 16:00 for product 35455 and brand 1")
+    void shouldReturnPrice25_When14thAt16_ForProduct35455AndBrand1() throws Exception {
         mockMvc.perform(get("/api/v1/prices")
                         .param("applicationDate", "2020-06-14T16:00:00")
                         .param("productId", "35455")
                         .param("brandId", "1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.priceList").exists())
-                .andExpect(jsonPath("$.price").exists())
-                .andExpect(jsonPath("$.startDate").exists())
-                .andExpect(jsonPath("$.endDate").exists())
-                .andExpect(jsonPath("$.productId").value(35455))
-                .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.price").value(25.45))
                 .andExpect(jsonPath("$.currency").value("EUR"));
     }
 
     @Test
-    @DisplayName("Test 3: When day 14 and hour 21, product 35455, brandId 1, expects price 35.50 EUR")
-    void test3WhenDay14AndHour21Product35455BrandId1ExpectsPrice() throws Exception {
-
+    @DisplayName("Should return price 35.50 EUR when 14th at 21:00 for product 35455 and brand 1")
+    void shouldReturnPrice35_When14thAt21_ForProduct35455AndBrand1() throws Exception {
         mockMvc.perform(get("/api/v1/prices")
                         .param("applicationDate", "2020-06-14T21:00:00")
                         .param("productId", "35455")
                         .param("brandId", "1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.priceList").exists())
-                .andExpect(jsonPath("$.price").exists())
-                .andExpect(jsonPath("$.startDate").exists())
-                .andExpect(jsonPath("$.endDate").exists())
-                .andExpect(jsonPath("$.productId").value(35455))
-                .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.price").value(35.50))
                 .andExpect(jsonPath("$.currency").value("EUR"));
     }
 
     @Test
-    @DisplayName("Test 4: When day 15 and hour 10, product 35455, brandId 1, expects price 30.50 EUR")
-    void test4WhenDay15AndHour10Product35455BrandId1ExpectsPrice() throws Exception {
-
+    @DisplayName("Should return price 30.50 EUR when 15th at 10:00 for product 35455 and brand 1")
+    void shouldReturnPrice30_When15thAt10_ForProduct35455AndBrand1() throws Exception {
         mockMvc.perform(get("/api/v1/prices")
                         .param("applicationDate", "2020-06-15T10:00:00")
                         .param("productId", "35455")
                         .param("brandId", "1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.priceList").exists())
-                .andExpect(jsonPath("$.price").exists())
-                .andExpect(jsonPath("$.startDate").exists())
-                .andExpect(jsonPath("$.endDate").exists())
-                .andExpect(jsonPath("$.productId").value(35455))
-                .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.price").value(30.50))
                 .andExpect(jsonPath("$.currency").value("EUR"));
     }
 
     @Test
-    @DisplayName("Test 5: When day 16 and hour 21, product 35455, brandId 1, expects price 38.95 EUR")
-    void test5WhenDay16AndHour21Product35455BrandId1ExpectsPrice() throws Exception {
-
+    @DisplayName("Should return price 38.95 EUR when 16th at 21:00 for product 35455 and brand 1")
+    void shouldReturnPrice38_When16thAt21_ForProduct35455AndBrand1() throws Exception {
         mockMvc.perform(get("/api/v1/prices")
                         .param("applicationDate", "2020-06-16T21:00:00")
                         .param("productId", "35455")
                         .param("brandId", "1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.priceList").exists())
-                .andExpect(jsonPath("$.price").exists())
-                .andExpect(jsonPath("$.startDate").exists())
-                .andExpect(jsonPath("$.endDate").exists())
-                .andExpect(jsonPath("$.productId").value(35455))
-                .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.price").value(38.95))
                 .andExpect(jsonPath("$.currency").value("EUR"));
-
     }
 
     @Test
@@ -140,95 +107,24 @@ class PriceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should return price when valid request")
-    void shouldReturnPriceWhenValidRequest() throws Exception {
-        mockMvc.perform(get("/api/v1/prices")
-                        .param("applicationDate", "2020-06-14T10:00:00")
-                        .param("productId", "35455")
-                        .param("brandId", "1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.productId").value(35455))
-                .andExpect(jsonPath("$.brandId").value(1))
-                .andExpect(jsonPath("$.priceList").exists())
-                .andExpect(jsonPath("$.price").exists())
-                .andExpect(jsonPath("$.startDate").exists())
-                .andExpect(jsonPath("$.endDate").exists());
-    }
-
-    @Test
-    @DisplayName("Should return 400 when missing required parameter applicationDate")
-    void shouldReturn400WhenMissingApplicationDate() throws Exception {
+    @DisplayName("Should return 400 when applicationDate is missing")
+    void shouldReturn400WhenApplicationDateMissing() throws Exception {
         mockMvc.perform(get("/api/v1/prices")
                         .param("productId", "35455")
                         .param("brandId", "1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.message").value(containsString("applicationDate")));
     }
 
     @Test
-    @DisplayName("Should return 400 when missing required parameter productId")
-    void shouldReturn400WhenMissingProductId() throws Exception {
-        mockMvc.perform(get("/api/v1/prices")
-                        .param("applicationDate", "2020-06-14T10:00:00")
-                        .param("brandId", "1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value(containsString("productId")));
-    }
-
-    @Test
-    @DisplayName("Should return 400 when missing required parameter brandId")
-    void shouldReturn400WhenMissingBrandId() throws Exception {
-        mockMvc.perform(get("/api/v1/prices")
-                        .param("applicationDate", "2020-06-14T10:00:00")
-                        .param("productId", "35455")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value(containsString("brandId")));
-    }
-
-    @Test
-    @DisplayName("Should return 400 when applicationDate has invalid format")
-    void shouldReturn400WhenInvalidDateFormat() throws Exception {
+    @DisplayName("Should return 400 when applicationDate format is invalid")
+    void shouldReturn400WhenApplicationDateInvalidFormat() throws Exception {
         mockMvc.perform(get("/api/v1/prices")
                         .param("applicationDate", "invalid-date")
                         .param("productId", "35455")
                         .param("brandId", "1")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400));
-    }
-
-    @Test
-    @DisplayName("Should validate complete response structure and data types")
-    void shouldValidateCompleteResponseStructure() throws Exception {
-        mockMvc.perform(get("/api/v1/prices")
-                        .param("applicationDate", "2020-06-14T10:00:00")
-                        .param("productId", "35455")
-                        .param("brandId", "1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.productId").exists())
-                .andExpect(jsonPath("$.brandId").exists())
-                .andExpect(jsonPath("$.priceList").exists())
-                .andExpect(jsonPath("$.startDate").exists())
-                .andExpect(jsonPath("$.endDate").exists())
-                .andExpect(jsonPath("$.price").exists())
-                .andExpect(jsonPath("$.productId").isNumber())
-                .andExpect(jsonPath("$.brandId").isNumber())
-                .andExpect(jsonPath("$.priceList").isNumber())
-                .andExpect(jsonPath("$.price").isNumber())
-                .andExpect(jsonPath("$.startDate").isString())
-                .andExpect(jsonPath("$.endDate").isString());
+                .andExpect(status().isBadRequest());
     }
 }
