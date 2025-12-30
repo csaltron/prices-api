@@ -18,7 +18,7 @@ public class Price {
     private final Long productId;
     private final Integer priority;
     private final BigDecimal price;
-    private final String currency;
+    private String currency;
 
     private Price(
             Long id,
