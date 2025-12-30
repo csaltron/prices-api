@@ -7,10 +7,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
 @Schema(description = "Respuesta con los datos del precio aplicable")
 public class PriceResponseDto {
 
