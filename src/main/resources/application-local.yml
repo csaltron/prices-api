@@ -29,14 +29,17 @@ spring:
 logging:
   level:
     com.company.prices: DEBUG
-    org.springframework.web: INFO
+    org.springframework.web: DEBUG
 
-spring-doc:
+server:
+  port: 8080
+
+springdoc:
   api-docs:
     enabled: true
     path: /api-docs
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
-    operationsSorter: method
-    tagsSorter: alpha
+    operations-sorter: method
+    tags-sorter: alpha

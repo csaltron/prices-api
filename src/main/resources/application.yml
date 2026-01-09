@@ -3,21 +3,9 @@ spring:
     name: prices-api
 
 server:
-  port: 8080
   error:
     include-message: always
     include-stacktrace: never
-
-logging:
-  level:
-    com.company.prices: INFO
-    org.springframework.web: INFO
-
-spring-doc:
-  api-docs:
-    enabled: false
-  swagger-ui:
-    enabled: false
 
 management:
   endpoints:
